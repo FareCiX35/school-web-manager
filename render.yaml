@@ -6,7 +6,7 @@ services:
     plan: free
     autoDeployTrigger: commit
     buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm run build:prod
-    startCommand: pnpm --filter @workspace/db run push && pnpm run start:prod
+    startCommand: pnpm --filter @workspace/db run push && pnpm --filter @workspace/scripts run seed && pnpm run start:prod
     healthCheckPath: /api/healthz
     envVars:
       - key: NODE_ENV
