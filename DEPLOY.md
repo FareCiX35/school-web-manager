@@ -121,7 +121,7 @@ This repo includes a ready-to-use `render.yaml` Blueprint.
 ### What the Blueprint does
 
 - builds the whole monorepo with `pnpm run build:prod`
-- runs `pnpm --filter @workspace/db run push` before deployment
+- runs `pnpm --filter @workspace/db run push` as part of startup on the free plan
 - injects `DATABASE_URL` from the Render Postgres database
 - generates `SESSION_SECRET`
 
