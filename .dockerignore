@@ -1,0 +1,12 @@
+.git
+.gitignore
+.replit
+.replitignore
+.local
+node_modules
+artifacts/api-server/dist
+artifacts/school-website/dist
+artifacts/mockup-sandbox/dist
+lib/**/dist
+coverage
+*.log

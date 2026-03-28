@@ -31,7 +31,7 @@ router.post("/", async (req: Request, res: Response) => {
 router.put("/:id", async (req: Request, res: Response) => {
   if (!req.session?.userId) { res.status(401).json({ error: "Yetkisiz" }); return; }
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(String(req.params.id), 10);
     const { title, description, eventDate, location, category, imageUrl } = req.body;
     const items = await db.update(eventsTable)
       .set({ title, description, eventDate: new Date(eventDate), location, category, imageUrl })
@@ -47,7 +47,7 @@ router.put("/:id", async (req: Request, res: Response) => {
 router.delete("/:id", async (req: Request, res: Response) => {
   if (!req.session?.userId) { res.status(401).json({ error: "Yetkisiz" }); return; }
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(String(req.params.id), 10);
     await db.delete(eventsTable).where(eq(eventsTable.id, id));
     res.json({ success: true, message: "Silindi" });
   } catch (err) {

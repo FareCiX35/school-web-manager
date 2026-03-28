@@ -16,7 +16,7 @@ router.get("/", async (req: Request, res: Response) => {
 
 router.get("/:id", async (req: Request, res: Response) => {
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(String(req.params.id), 10);
     const items = await db.select().from(newsTable).where(eq(newsTable.id, id));
     if (!items[0]) { res.status(404).json({ error: "Bulunamadı" }); return; }
     res.json(items[0]);
@@ -44,7 +44,7 @@ router.post("/", async (req: Request, res: Response) => {
 router.put("/:id", async (req: Request, res: Response) => {
   if (!req.session?.userId) { res.status(401).json({ error: "Yetkisiz" }); return; }
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(String(req.params.id), 10);
     const { title, summary, content, imageUrl, category, publishedAt } = req.body;
     const items = await db.update(newsTable)
       .set({ title, summary, content, imageUrl, category, publishedAt: publishedAt ? new Date(publishedAt) : new Date() })
@@ -60,7 +60,7 @@ router.put("/:id", async (req: Request, res: Response) => {
 router.delete("/:id", async (req: Request, res: Response) => {
   if (!req.session?.userId) { res.status(401).json({ error: "Yetkisiz" }); return; }
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(String(req.params.id), 10);
     await db.delete(newsTable).where(eq(newsTable.id, id));
     res.json({ success: true, message: "Silindi" });
   } catch (err) {

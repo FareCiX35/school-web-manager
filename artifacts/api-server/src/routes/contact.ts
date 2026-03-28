@@ -33,7 +33,7 @@ router.get("/", async (req: Request, res: Response) => {
 router.put("/:id/read", async (req: Request, res: Response) => {
   if (!req.session?.userId) { res.status(401).json({ error: "Yetkisiz" }); return; }
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(String(req.params.id), 10);
     await db.update(contactMessagesTable).set({ isRead: true }).where(eq(contactMessagesTable.id, id));
     res.json({ success: true, message: "Okundu olarak işaretlendi" });
   } catch (err) {

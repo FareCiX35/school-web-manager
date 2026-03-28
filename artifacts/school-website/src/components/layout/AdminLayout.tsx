@@ -1,9 +1,18 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { 
-  LayoutDashboard, Megaphone, CalendarDays, Newspaper, 
-  Users, UserCheck, GraduationCap, Image as ImageIcon,
-  MessageSquare, Settings, LogOut, Loader2
+import {
+  CalendarDays,
+  GraduationCap,
+  Image as ImageIcon,
+  LayoutDashboard,
+  Loader2,
+  LogOut,
+  Megaphone,
+  MessageSquare,
+  Newspaper,
+  Settings,
+  UserCheck,
+  Users,
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import logoImg from "@assets/download_1774721779500.png";
@@ -13,95 +22,121 @@ const ADMIN_LINKS = [
   { href: "/admin/announcements", label: "Duyurular", icon: Megaphone },
   { href: "/admin/events", label: "Etkinlikler", icon: CalendarDays },
   { href: "/admin/news", label: "Haberler", icon: Newspaper },
-  { href: "/admin/students", label: "Öğrenciler", icon: Users },
-  { href: "/admin/teachers", label: "Öğretmenler", icon: UserCheck },
+  { href: "/admin/students", label: "Ogrenciler", icon: Users },
+  { href: "/admin/teachers", label: "Ogretmenler", icon: UserCheck },
   { href: "/admin/alumni", label: "Mezunlar", icon: GraduationCap },
   { href: "/admin/gallery", label: "Galeri", icon: ImageIcon },
-  { href: "/admin/clubs", label: "Kulüpler", icon: Users },
+  { href: "/admin/clubs", label: "Kulupler", icon: Users },
   { href: "/admin/contact", label: "Mesajlar", icon: MessageSquare },
   { href: "/admin/settings", label: "Ayarlar", icon: Settings },
 ];
 
 export function AdminLayout({ children }: { children: ReactNode }) {
   const [location, setLocation] = useLocation();
-  const { user, isLoading, logout } = useAuth();
+  const { user, isLoading, isError, error, logout } = useAuth();
+
+  useEffect(() => {
+    if (!isLoading && !user && location !== "/admin/login") {
+      setLocation("/admin/login");
+    }
+  }, [isLoading, location, setLocation, user]);
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-muted/50">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      <div className="flex min-h-screen items-center justify-center bg-muted/50">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
 
   if (!user && location !== "/admin/login") {
-    setLocation("/admin/login");
-    return null;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-muted/50 px-6">
+        <div className="max-w-md rounded-2xl border border-border bg-white p-8 text-center shadow-sm">
+          <h2 className="text-2xl font-display font-bold text-foreground">Oturum Dogrulanamadi</h2>
+          <p className="mt-3 text-sm text-muted-foreground">
+            {isError
+              ? "API servisinden gecerli bir yanit alinamadi. Giris ekranina geri yonlendiriliyorsunuz."
+              : "Giris yapmaniz gerekiyor. Giris ekranina geri yonlendiriliyorsunuz."}
+          </p>
+          {isError && (
+            <p className="mt-3 text-xs text-muted-foreground">
+              {(error as any)?.message || "Sunucuya baglanilamadi."}
+            </p>
+          )}
+          <button
+            onClick={() => setLocation("/admin/login")}
+            className="mt-6 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
+          >
+            Girise Don
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-muted/30 flex">
-      {/* Sidebar */}
-      <aside className="w-64 bg-sidebar text-sidebar-foreground flex-shrink-0 fixed h-full shadow-2xl z-20">
-        <div className="p-6 border-b border-sidebar-border flex items-center gap-3">
-          <img src={logoImg} alt="Logo" className="w-10 h-10 bg-white rounded-full p-0.5" />
+    <div className="flex min-h-screen bg-muted/30">
+      <aside className="fixed z-20 h-full w-64 flex-shrink-0 bg-sidebar text-sidebar-foreground shadow-2xl">
+        <div className="flex items-center gap-3 border-b border-sidebar-border p-6">
+          <img src={logoImg} alt="Logo" className="h-10 w-10 rounded-full bg-white p-0.5" />
           <div>
-            <h2 className="font-display font-bold text-sm leading-tight text-white">Şehit Hakan Gülşen</h2>
-            <p className="text-xs text-sidebar-primary">Yönetim Paneli</p>
+            <h2 className="text-sm font-display font-bold leading-tight text-white">
+              Sehit Hakan Gulsen
+            </h2>
+            <p className="text-xs text-sidebar-primary">Yonetim Paneli</p>
           </div>
         </div>
 
-        <nav className="p-4 space-y-1 overflow-y-auto h-[calc(100vh-140px)]">
+        <nav className="h-[calc(100vh-140px)] overflow-y-auto p-4 space-y-1">
           {ADMIN_LINKS.map((link) => {
             const Icon = link.icon;
             const active = location === link.href;
+
             return (
-              <Link 
-                key={link.href} 
+              <Link
+                key={link.href}
                 href={link.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                  active 
-                    ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-md" 
-                    : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground text-sidebar-foreground/80"
+                className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all ${
+                  active
+                    ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-md"
+                    : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                 }`}
               >
-                <Icon className={`w-5 h-5 ${active ? "" : "opacity-70"}`} />
+                <Icon className={`h-5 w-5 ${active ? "" : "opacity-70"}`} />
                 {link.label}
               </Link>
             );
           })}
         </nav>
 
-        <div className="absolute bottom-0 w-full p-4 border-t border-sidebar-border bg-sidebar">
-          <button 
+        <div className="absolute bottom-0 w-full border-t border-sidebar-border bg-sidebar p-4">
+          <button
             onClick={() => logout.mutate(undefined, { onSuccess: () => setLocation("/admin/login") })}
-            className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-sm font-medium text-destructive hover:bg-destructive/20 transition-all"
+            className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-destructive transition-all hover:bg-destructive/20"
           >
-            <LogOut className="w-5 h-5" />
-            Çıkış Yap
+            <LogOut className="h-5 w-5" />
+            Cikis Yap
           </button>
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 ml-64 min-h-screen flex flex-col">
-        <header className="h-16 bg-white border-b border-border flex items-center justify-between px-8 sticky top-0 z-10 shadow-sm">
-          <h1 className="font-display font-bold text-xl text-foreground">
-            {ADMIN_LINKS.find(l => l.href === location)?.label || "Yönetim Paneli"}
+      <main className="ml-64 flex min-h-screen flex-1 flex-col">
+        <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-border bg-white px-8 shadow-sm">
+          <h1 className="text-xl font-display font-bold text-foreground">
+            {ADMIN_LINKS.find((link) => link.href === location)?.label || "Yonetim Paneli"}
           </h1>
           <div className="flex items-center gap-4">
-            <Link href="/" className="text-sm font-medium text-primary hover:underline flex items-center gap-1">
-              Siteye Dön
+            <Link href="/" className="flex items-center gap-1 text-sm font-medium text-primary hover:underline">
+              Siteye Don
             </Link>
-            <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
               {user?.fullName?.charAt(0) || "A"}
             </div>
           </div>
         </header>
-        
-        <div className="p-8 flex-1">
-          {children}
-        </div>
+
+        <div className="flex-1 p-8">{children}</div>
       </main>
     </div>
   );

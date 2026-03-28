@@ -1,28 +1,29 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { 
-  useGetMe, 
-  useLogin, 
-  useLogout, 
-  getGetMeQueryKey 
+import {
+  getGetMeQueryKey,
+  useGetMe,
+  useLogin,
+  useLogout,
 } from "@workspace/api-client-react";
 
 export function useAuth() {
   const queryClient = useQueryClient();
   const queryKey = getGetMeQueryKey();
 
-  const me = useGetMe({ 
-    query: { 
+  const me = useGetMe({
+    query: {
+      queryKey,
       retry: false,
-      staleTime: 1000 * 60 * 5, // 5 mins
-    } 
+      staleTime: 1000 * 60 * 5,
+    },
   });
 
   const login = useLogin({
     mutation: {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey });
-      }
-    }
+      },
+    },
   });
 
   const logout = useLogout({
@@ -30,15 +31,16 @@ export function useAuth() {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey });
         queryClient.setQueryData(queryKey, null);
-      }
-    }
+      },
+    },
   });
 
-  return { 
-    user: me.data, 
-    isLoading: me.isLoading, 
+  return {
+    user: me.data,
+    isLoading: me.isLoading,
     isError: me.isError,
-    login, 
-    logout 
+    error: me.error,
+    login,
+    logout,
   };
 }

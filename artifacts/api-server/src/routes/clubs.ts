@@ -29,7 +29,7 @@ router.post("/", async (req: Request, res: Response) => {
 router.put("/:id", async (req: Request, res: Response) => {
   if (!req.session?.userId) { res.status(401).json({ error: "Yetkisiz" }); return; }
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(String(req.params.id), 10);
     const { name, description, advisorName, imageUrl, memberCount } = req.body;
     const items = await db.update(clubsTable)
       .set({ name, description, advisorName, imageUrl, memberCount })
@@ -45,7 +45,7 @@ router.put("/:id", async (req: Request, res: Response) => {
 router.delete("/:id", async (req: Request, res: Response) => {
   if (!req.session?.userId) { res.status(401).json({ error: "Yetkisiz" }); return; }
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(String(req.params.id), 10);
     await db.delete(clubsTable).where(eq(clubsTable.id, id));
     res.json({ success: true, message: "Silindi" });
   } catch (err) {

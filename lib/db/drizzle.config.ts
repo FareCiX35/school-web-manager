@@ -1,14 +1,17 @@
 import { defineConfig } from "drizzle-kit";
-import path from "path";
 
-if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL, ensure the database is provisioned");
+const localDatabaseUrl =
+  "postgresql://postgres:postgres@localhost:5432/school_web_manager";
+const databaseUrl = process.env.DATABASE_URL ?? localDatabaseUrl;
+
+if (!process.env.DATABASE_URL && process.env.NODE_ENV === "production") {
+  throw new Error("DATABASE_URL must be set in production.");
 }
 
 export default defineConfig({
-  schema: path.join(__dirname, "./src/schema/index.ts"),
+  schema: "./src/schema/*.ts",
   dialect: "postgresql",
   dbCredentials: {
-    url: process.env.DATABASE_URL,
+    url: databaseUrl,
   },
 });
