@@ -1,3 +1,25 @@
+# Şehit Hakan Gülşen Anadolu İmam Hatip Lisesi Web Sitesi
+
+## Admin Bilgileri
+- Admin URL: `/admin/login`
+- Kullanıcı Adı: `admin`
+- Şifre: `admin`
+
+## Sayfalar
+- Ana Sayfa (/)
+- Etkinlikler (/etkinlikler)
+- Öğrenci Köşesi (/ogrenci-kosesi)
+- Öğretmen Atölyesi (/ogretmen-atolyesi)
+- Mezunlar Kulübü (/mezunlar-kulubu)
+- Galeri (/galeri)
+- İletişim (/iletisim)
+- Admin Paneli (/admin)
+
+## Admin Paneli Yönetim Bölümleri
+Duyurular, Etkinlikler, Haberler, Öğrenci Yazıları, Öğretmenler, Galeri, Mezunlar, Kulüpler, İletişim Mesajları, Site Ayarları
+
+---
+
 # Workspace
 
 ## Overview

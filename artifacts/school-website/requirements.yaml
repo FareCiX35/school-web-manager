@@ -1,0 +1,22 @@
+packages:
+  "framer-motion": "For stunning page transitions, scroll animations, and interactive component states"
+  "date-fns": "For formatting event dates and news timestamps professionally"
+  "embla-carousel-react": "For the hero section slider and photo galleries"
+  "embla-carousel-autoplay": "For auto-advancing the hero slider"
+  "react-hook-form": "For robust admin and contact form state management"
+
+images:
+  - path: "artifacts/school-website/public/images/hero-bg.png"
+    description: "Professional modern high school exterior building with clear sky, sunny day, realistic architectural rendering, institutional navy and white theme"
+    aspect_ratio: "16:9"
+  - path: "artifacts/school-website/public/images/pattern-bg.png"
+    description: "Abstract subtle geometric pattern in light grey and white with very soft navy blue accents, perfect for a sophisticated website background texture"
+    aspect_ratio: "16:9"
+  - path: "artifacts/school-website/public/images/about-school.png"
+    description: "Students studying in a modern, bright library with sunlight streaming through windows, professional educational photography style"
+    aspect_ratio: "4:3"
+
+notes:
+  - Using generated Orval hooks from @workspace/api-client-react
+  - Admin panel is secured with session-based authentication
+  - Theme colors are customized in index.css to match a premium institutional navy blue and gold aesthetic
